@@ -1,25 +1,29 @@
 # A.R.M.O.N.I.A.
-Advanced Recording &amp; Media Organizer for Natural Integrated Audio, shortened to Armonia, is a music composition envirnoment designed to offer a better balance for people attempting to compose music. WIP
+Advanced Recording &amp; Media Organizer for Natural Integrated Audio, shortened to Armonia, is a music composition environment designed to offer a better balance for people attempting to compose music. WIP, Open-Source.
+
+---
+# Path to creation >> Documentation >> Controls
+xxx
 
 ---
 # Path to creation >> Documentation >> Journal
 
 This is my first real solo project where I dig low into the system to use something like a mic and speaker. To do this, I'm going to use a WinUI structure and create a proper executable, in an attempt to create an industry level product (for free) that is unique and useful. This also means I can integrate my designs I've worked with, and be able to display more than just systems.
 
----
+
 To start with the design:
 ---
-I create my splash screen and "logo" which is just going to be earthy. I'm going to use a wavey blue and black "A" for my icon, and the full name "Armonia" as my screen. Armonia will include a banjo, guitar, mics, drums, and a maybe a violin in the mountains. Will probably apply an oil filter to a picture I took in the Tetons.
+**0.1** I need to create my splash screen and "logo" which is just going to be earthy. I'm going to use a wavey blue and black "A" for my icon, and the full name "Armonia" as my screen. Armonia will include a banjo, guitar, drums, and maybe a violin; it will be in the mountains. Will probably apply an oil filter, scribble filter to a picture I took in the Tetons.
 
----
-Next I create my file structure(should've maybe done this first):
+**0.2** I used a picture I took of delta lake in the Tetons, applied a scratch filter, and squared the image. I drew the instruments aforementioned and gave them a similar scratch design, albeit a little less and added them. Went with a blue design. The icon is small and still a WIP, will try to make it a little more noticeably shaped instead of just round. Maybe the guitar, a mic, or just the A.
+
+
+Next I create my file structure (should've maybe done this first):
 ---
 <img width="319" height="798" alt="image" src="https://github.com/user-attachments/assets/1d10a646-6389-458e-88ed-11d92ce803a2" />
 
----
 As you can see from the image, this project is going to be built on C# and XML(xaml). Felt it was easier to become better at C# than it was to create a UI framework with C++. And XMLs, or XAMLs in this case are pretty simple and straightforward. I use the XAML to declare my logic in C#. Unfortunate downside with using C# is I'm going to use .NET(Downside???) to run the program.
 
----
 I'll break down the important notes for my stub files, not everything for the reason of space and time. Learned quite a lot of new information regarding mic import and converting to .wav files
 
 app.xaml
