@@ -1,0 +1,19 @@
+# Build artifacts
+bin/
+obj/
+
+# User-specific files
+.vs/
+.vscode/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Temporary
+*.log
+*.tmp
+
+# OS junk
+.DS_Store
+Thumbs.db
