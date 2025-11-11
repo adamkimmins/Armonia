@@ -31,7 +31,7 @@
                                 </Border.Background>
                             </Border>
 
-                            <!-- Red LED -->
+                            <!-- Red led -->
                             <Ellipse x:Name="Led"
                                     Width="6" Height="6"
                                     HorizontalAlignment="Right"
