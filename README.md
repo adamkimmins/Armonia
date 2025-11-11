@@ -1,13 +1,13 @@
 # A.R.M.O.N.I.A.
 Advanced Recording &amp; Media Organizer for Natural Integrated Audio, shortened to Armonia, is a music composition environment designed to offer a better balance for people attempting to compose music. WIP, Open-Source.
 
-Purpose
+# Purpose
 The problems my app hopes to solve for DAWs
-#1 is scalability. Most DAWs are massive, computer only apps or sites that cluttered and overpopulated. The clutter leads to intimidation which can scare away beginners
-#2 is price, no one wants to pay hundreds of dollars to have an EQ editor, or MIDI control.
-#3 Is solo workflow. For artists seeking to create their own songs, rather than producers making a melody to sell. This includes more artistic features, like a lyrics editor.
-#4 Have a database for users to store their polished/better projects, limited.
-#5 Use this database to make an iPhone app version of Armonia to allow users to edit their projects where ever.
+- #1 is scalability. Most DAWs are massive, computer only apps or sites that cluttered and overpopulated. The clutter leads to intimidation which can scare away beginners
+- #2 is price, no one wants to pay hundreds of dollars to have an EQ editor, or MIDI control.
+- #3 Is solo workflow. For artists seeking to create their own songs, rather than producers making a melody to sell. This includes more artistic features, like a lyrics editor.
+- #4 Have a database for users to store their polished/better projects, limited.
+- #5 Use this database to make an iPhone app version of Armonia to allow users to edit their projects where ever.
 
 
 
