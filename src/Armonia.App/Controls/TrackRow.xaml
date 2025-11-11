@@ -1,0 +1,239 @@
+<UserControl x:Class="Armonia.App.Controls.TrackRow"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Height="90" Background="#dec4a1">
+
+    <UserControl.Resources>
+        <!-- === SAFE Metallic Toggle Style === -->
+        <Style x:Key="MetalToggleStyle" TargetType="ToggleButton">
+            <Setter Property="Width" Value="24"/>
+            <Setter Property="Height" Value="20"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="#333"/>
+            <Setter Property="Cursor" Value="Hand"/>
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ToggleButton">
+                        <Grid>
+                            <!-- Button body -->
+                            <Border x:Name="Body"
+                                    CornerRadius="5"
+                                    BorderBrush="#777"
+                                    BorderThickness="1"
+                                    SnapsToDevicePixels="True">
+                                <Border.Background>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                        <GradientStop Color="#f2f2f2" Offset="0.0"/>
+                                        <GradientStop Color="#c9c9c9" Offset="0.5"/>
+                                        <GradientStop Color="#a0a0a0" Offset="1.0"/>
+                                    </LinearGradientBrush>
+                                </Border.Background>
+                            </Border>
+
+                            <!-- Red LED -->
+                            <Ellipse x:Name="Led"
+                                    Width="6" Height="6"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Bottom"
+                                    Margin="4"
+                                    Fill="#440000"
+                                    Visibility="Collapsed"/>
+
+                            <ContentPresenter HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"/>
+                        </Grid>
+
+                        <ControlTemplate.Triggers>
+
+                            <!-- Hover -->
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Body" Property="BorderBrush" Value="#999"/>
+                                <Setter TargetName="Body" Property="Background">
+                                    <Setter.Value>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                            <GradientStop Color="#ffffff" Offset="0"/>
+                                            <GradientStop Color="#d9d9d9" Offset="0.5"/>
+                                            <GradientStop Color="#b0b0b0" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+
+                            <!-- Pressed -->
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="Body" Property="Background">
+                                    <Setter.Value>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                            <GradientStop Color="#bbbbbb" Offset="0"/>
+                                            <GradientStop Color="#888888" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+
+                            <!-- Checked / Active -->
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="Led" Property="Visibility" Value="Visible"/>
+                                <Setter TargetName="Led" Property="Fill" Value="#e60000"/>
+                                <Setter TargetName="Body" Property="BorderBrush" Value="#a00"/>
+                            </Trigger>
+
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+
+            <!-- Slider -->
+        <!-- === SAFE Metallic Fader Style === -->
+        <Style x:Key="MetalFaderStyle" TargetType="Slider">
+            <Setter Property="Width" Value="22"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Slider">
+                        <Grid>
+                            <!-- Vertical track body -->
+                            <Rectangle x:Name="TrackBody"
+                                    Width="6"
+                                    HorizontalAlignment="Center"
+                                    RadiusX="3" RadiusY="3"
+                                    Stroke="#666"
+                                    StrokeThickness="1">
+                                <Rectangle.Fill>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                        <GradientStop Color="#555" Offset="0.0"/>
+                                        <GradientStop Color="#333" Offset="0.5"/>
+                                        <GradientStop Color="#111" Offset="1.0"/>
+                                    </LinearGradientBrush>
+                                </Rectangle.Fill>
+                            </Rectangle>
+
+                            <!-- The actual Track part logic (thumb we shall say) -->
+                            <Track x:Name="PART_Track">
+                                <Track.Thumb>
+                                    <Thumb Width="12" Height="10" Cursor="SizeNS">
+                                        <Thumb.Template>
+                                            <ControlTemplate TargetType="Thumb">
+                                                <Border CornerRadius="6"
+                                                        BorderBrush="#888"
+                                                        BorderThickness="1">
+                                                    <Border.Background>
+                                                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                                            <GradientStop Color="#f7f7f7" Offset="0.0"/>
+                                                            <GradientStop Color="#c8c8c8" Offset="0.5"/>
+                                                            <GradientStop Color="#9c9c9c" Offset="1.0"/>
+                                                        </LinearGradientBrush>
+                                                    </Border.Background>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Thumb.Template>
+                                    </Thumb>
+                                </Track.Thumb>
+                            </Track>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+
+    </UserControl.Resources>
+  
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="100"/>   <!-- control panel -->
+      <ColumnDefinition Width="*"/>    <!-- lane -->
+    </Grid.ColumnDefinitions>
+
+    <!-- LEFT: control panel -->
+    <Grid Grid.Column="0" Background="#c4a983" Margin="0,0,2,0">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="28"/>   <!-- name -->
+        <RowDefinition Height="*"/><!-- mute/solo -->
+      </Grid.RowDefinitions>
+
+      <!-- Name: text + editor layered in same cell -->
+      
+      <Grid Grid.Row="0">
+        <TextBlock x:Name="NameText"
+                   Text="{Binding Name}"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   Foreground="#3f2f22"
+                   FontWeight="SemiBold"
+                   MouseDown="NameText_MouseDown"/>
+        <TextBox x:Name="NameEditor"
+                 Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                 Visibility="Collapsed"
+                 HorizontalAlignment="Stretch"
+                 VerticalAlignment="Center"
+                 Margin="4,0"
+                 Background="#f4e6cf"
+                 BorderBrush="#a38a68"
+                 BorderThickness="1"
+                 Foreground="#3f2f22"
+                 KeyDown="NameEditor_KeyDown"
+                 LostFocus="NameEditor_LostFocus"/>
+      </Grid>
+
+       <!-- ====== Controls ====== -->
+      <Grid Grid.Row="1" Margin="4">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*"/>    <!-- buttons -->
+          <ColumnDefinition Width="20"/>   <!-- fader -->
+          <ColumnDefinition Width="*"/>   <!-- Record in shi -->
+        </Grid.ColumnDefinitions>
+
+        <!-- M & S Buttons stacked -->
+        <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="4">
+          <ToggleButton x:Name="MuteBtn"
+                        Style="{StaticResource MetalToggleStyle}"
+                        IsChecked="{Binding IsMuted}"
+                        Content="M"/>
+          <ToggleButton x:Name="SoloBtn"
+                        Style="{StaticResource MetalToggleStyle}"
+                        IsChecked="{Binding IsSolo}"
+                        Content="S"/>
+        </StackPanel>
+
+        <!-- Fader -->
+        <Border Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+          <Slider Orientation="Vertical"
+                  Height="40"
+                  Width="20"
+                  Minimum="0" Maximum="1"
+                  Value="{Binding Volume}"
+                  Style="{StaticResource MetalFaderStyle}"/>
+        </Border>
+
+        <!-- Record and shi -->
+        <StackPanel Grid.Column="2" VerticalAlignment="Center" Margin="4">
+          <ToggleButton x:Name="TrackRecordBtn"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        IsChecked="{Binding IsMuted}"
+                        Content="🔴"
+                        Foreground="Red"/>
+          <ToggleButton x:Name="TrackStopBtn"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        IsChecked="{Binding IsSolo}"
+                        Content="⏹"/>
+          </StackPanel>
+      </Grid>
+    </Grid>
+
+    <!-- RIGHT: clip lane -->
+    <Border Grid.Column="1" Background="#e7d5c0">
+      <Canvas x:Name="Lane" Background="Transparent"/>
+    </Border>
+
+    <!-- thin bottom separator (across whole row) -->
+    <Rectangle Height="1"
+               Fill="#6b563f"
+               VerticalAlignment="Bottom"
+               Grid.ColumnSpan="2"/>
+  </Grid>
+</UserControl>

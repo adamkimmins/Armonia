@@ -1,0 +1,264 @@
+<Window x:Class="Armonia.App.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Armonia"
+        WindowStartupLocation="CenterScreen"
+        Background="#cfb29a"
+        Width="600" Height="650">
+
+    <Window.Resources>
+        <!-- Songs button and Create New button" -->
+        <Style x:Key="FullRowButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0,0,5,0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Foreground" Value="#5A3E2B"/>
+            <Setter Property="FontFamily" Value="Georgia"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="56"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="VerticalAlignment" Value="Stretch"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
+            <Setter Property="RenderTransform">
+                <Setter.Value>
+                    <TranslateTransform Y="0"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="bg"
+                                Background="{TemplateBinding Background}"
+                                BorderThickness="0">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"/>
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+                            <!-- back fade -->
+                            <EventTrigger RoutedEvent="MouseEnter">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation To="#cfb29a"
+                                                        Storyboard.TargetName="bg"
+                                                        Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+                                                        Duration="0:0:0.4"  
+                                                        AccelerationRatio="0.1"
+                                                        DecelerationRatio="0.9"/>
+                                        <DoubleAnimation To="-4"
+                                                         Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)"
+                                                         Duration="0:0:0.2"
+                                                         AccelerationRatio="0.1"
+                                                         DecelerationRatio="0.9"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+
+                            <EventTrigger RoutedEvent="MouseLeave">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation To="Transparent"
+                                                        Storyboard.TargetName="bg"
+                                                        Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+                                                        Duration="0:0:0.6"   
+                                                        AccelerationRatio="0.4"
+                                                        DecelerationRatio="0.6"/>
+                                        <DoubleAnimation To="0"
+                                                         Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)"
+                                                         Duration="0:0:0.4"
+                                                         AccelerationRatio="0.4"
+                                                         DecelerationRatio="0.6"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+
+                            <EventTrigger RoutedEvent="Button.Click">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation To="8"
+                                                        Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)"
+                                                        Duration="0:0:0.2"
+                                                        AutoReverse="True"/>
+                                        <DoubleAnimation To="0.5"
+                                                        Storyboard.TargetProperty="Opacity"
+                                                        Duration="0:0:0.25"
+                                                        AutoReverse="True"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+
+
+                            <!-- Hover -->
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Foreground" Value="#27190f"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Foreground" Value="#140c05"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Icon button -->
+        <Style x:Key="IconButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="FontSize" Value="30"/>
+            <Setter Property="Foreground" Value="#2c1a0c"/>
+            <Setter Property="FontFamily" Value="Segoe UI Emoji"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
+            <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
+            <Setter Property="RenderTransform">
+                <Setter.Value>
+                    <TranslateTransform Y="0"/>
+                </Setter.Value>
+            </Setter>
+
+            <Setter Property="Template">
+                <Setter.Value>
+
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="fg"
+                                Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            TextElement.Foreground="{TemplateBinding Foreground}"/>
+                        </Border>
+
+                    <ControlTemplate.Resources>
+                        <!-- settings icon brush -->
+                        <SolidColorBrush x:Key="IconBrush" Color="#2c1a0c"/>
+                    </ControlTemplate.Resources>
+
+                        <ControlTemplate.Triggers>
+                            <!-- Fade Foreground to white on hover -->
+                            <EventTrigger RoutedEvent="MouseEnter">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation To="#0f0700"
+                                                        Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)"
+                                                        Duration="0:0:0.2"
+                                                        AccelerationRatio="0.1"
+                                                        DecelerationRatio="0.9"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+
+                            <!-- Fade back to brown on leave -->
+                            <EventTrigger RoutedEvent="MouseLeave">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation To="#2c1a0c"
+                                                        Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)"
+                                                        Duration="0:0:0.5"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                            <!-- Hover Bigger-->
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="RenderTransform">
+                                    <Setter.Value>
+                                        <ScaleTransform ScaleX="1.11" ScaleY="1.11"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+
+                            <!-- Press -->
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Foreground" Value="#5A3E2B"/>
+                                <Setter Property="RenderTransform">
+                                    <Setter.Value>
+                                        <TranslateTransform Y="3"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <!-- Splash overlay -->
+        <Grid x:Name="SplashOverlay" Background="#cfb29a">
+            <Image Source="Assets/ArmoniaOrange.png"
+                   Stretch="UniformToFill"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"/>
+        </Grid>
+
+        <!-- Welcome / Tutorial -->
+        <Grid x:Name="StarterContent" Opacity="0" Background="#cfb29a">
+            <Grid.RenderTransform>
+                <TranslateTransform Y="0"/>
+            </Grid.RenderTransform>
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock Text="Welcome to Armonia"
+                           FontSize="26"
+                           FontWeight="Bold"
+                           Foreground="Black"
+                           HorizontalAlignment="Center"/>
+            </StackPanel>
+        </Grid>
+
+        <!-- Main Content -->
+        <Grid x:Name="MainContent" Background="#81614d" Opacity="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="2*" /> <!-- Top: Songs -->
+                <RowDefinition Height="*" />  <!-- Bottom: Create -->
+            </Grid.RowDefinitions>
+
+            <!-- Top "Songs" -->
+            <Button Grid.Row="0"
+                    Content="Songs"
+                    Click="Songs_Click"
+                    Style="{StaticResource FullRowButtonStyle}"
+                    FontFamily="Georgia"
+                    FontWeight="Bold"
+                    Background="#81614d"
+                    Foreground="#36261a"/>
+            <!--Border-->
+            <Border Grid.Row="0"
+                    VerticalAlignment="bottom"
+                    Height="4"
+                    Background="#211005"
+                    Panel.ZIndex="0"/>
+
+            <!-- Bottom "Create New Song" -->
+            <Button Grid.Row="1"
+                    Content="Create New"
+                    Click="CreateNew_Click"
+                    Style="{StaticResource FullRowButtonStyle}"
+                    FontFamily="Georgia"
+                    FontWeight="Bold"
+                    Foreground="#36261a"
+                    Background="#81614d"/>
+
+            <!-- Top-left ⚙️ -->
+            <Button x:Name="SettingsButton"
+                    Click="Settings_Click"
+                    Style="{StaticResource IconButtonStyle}"
+                    Content="⚙️"
+                    FontSize="30"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    Foreground="#50301a"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Margin="15"/>
+        </Grid>
+
+        <!-- Frame -->
+        <!-- Replace Frame with this -->
+<ContentControl x:Name="MainFrame"
+                Background="Transparent"
+                Visibility="Collapsed"
+                Panel.ZIndex="10"/>
+    </Grid>
+</Window>
