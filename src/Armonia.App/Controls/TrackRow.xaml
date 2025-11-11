@@ -150,8 +150,8 @@
     <!-- LEFT: control panel -->
     <Grid Grid.Column="0" Background="#c4a983" Margin="0,0,2,0">
       <Grid.RowDefinitions>
-        <RowDefinition Height="28"/>   <!-- name -->
-        <RowDefinition Height="*"/><!-- mute/solo -->
+        <RowDefinition Height="23"/>   <!-- name -->
+        <RowDefinition Height="*"/><!-- Record/Pause/Stop arm -->
       </Grid.RowDefinitions>
 
       <!-- Name: text + editor layered in same cell -->
@@ -169,7 +169,7 @@
                  Visibility="Collapsed"
                  HorizontalAlignment="Stretch"
                  VerticalAlignment="Center"
-                 Margin="4,0"
+                 Margin="0"
                  Background="#f4e6cf"
                  BorderBrush="#a38a68"
                  BorderThickness="1"
@@ -179,27 +179,87 @@
       </Grid>
 
        <!-- ====== Controls ====== -->
-      <Grid Grid.Row="1" Margin="4">
+      <Grid Grid.Row="1" > <!--All Control content wrapper-->
         <Grid.ColumnDefinitions>
           <ColumnDefinition Width="*"/>    <!-- buttons -->
           <ColumnDefinition Width="20"/>   <!-- fader -->
-          <ColumnDefinition Width="*"/>   <!-- Record in shi -->
         </Grid.ColumnDefinitions>
+        
+      <Grid> <!--Buttons grid wrapper-->
+        <Grid.RowDefinitions>
+          <RowDefinition Height="*"/>    <!-- Record -->
+          <RowDefinition Height="*"/>    <!-- Mute -->
+          <RowDefinition Height="*"/>    <!-- Upload -->
+        </Grid.RowDefinitions>
 
+        <!-- Record and shi -->
+        <Grid Grid.Row="0" Background="Black">
+        <StackPanel Grid.Row="0" VerticalAlignment="Center" Margin="5,0,0,0">
+          <ToggleButton x:Name="TrackRecordBtn"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        IsChecked="{Binding IsMuted}"
+                        Content="🔴"
+                        Foreground="Red"
+                        HorizontalAlignment="Left"/>
+        </StackPanel>
+        <StackPanel Grid.Row="0" VerticalAlignment="Center" Margin="0,0,0,0">
+          <ToggleButton x:Name="TrackPauseBtn"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        IsChecked="{Binding IsSolo}"
+                        Foreground="White"
+                        Content="⏸️"
+                        HorizontalAlignment="Center"/>
+          </StackPanel>
+        <StackPanel Grid.Row="0" VerticalAlignment="Center" Margin="0,0,5,0">
+          <ToggleButton x:Name="TrackStopBtn"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        IsChecked="{Binding IsSolo}"
+                        Foreground="White"
+                        Content="⏹"
+                        HorizontalAlignment="Right"/>
+          </StackPanel>
+        </Grid>
         <!-- M & S Buttons stacked -->
-        <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="4">
+        <StackPanel Grid.Row="1" VerticalAlignment="Center" Margin="10,0,0,0">
           <ToggleButton x:Name="MuteBtn"
                         Style="{StaticResource MetalToggleStyle}"
                         IsChecked="{Binding IsMuted}"
-                        Content="M"/>
+                        Content="M"
+                        HorizontalAlignment="Left"/>
+        </StackPanel>
+        <StackPanel Grid.Row="1" VerticalAlignment="Center" Margin="0,0,10,0">
           <ToggleButton x:Name="SoloBtn"
                         Style="{StaticResource MetalToggleStyle}"
                         IsChecked="{Binding IsSolo}"
-                        Content="S"/>
+                        Content="S"
+                        HorizontalAlignment="Right"/>
         </StackPanel>
 
+        <!-- Upload and Trash -->
+        <StackPanel Grid.Row="2" VerticalAlignment="Center" Margin="10,0,0,0">
+          <ToggleButton x:Name="TrackTrashBtn"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        IsChecked="{Binding IsMuted}"
+                        Content="🗑️"
+                        Foreground="Red"
+                        HorizontalAlignment="Left"/>
+          </StackPanel>
+          <StackPanel Grid.Row="2" VerticalAlignment="Center" Margin="0,0,15,0">
+          <ToggleButton x:Name="TrackUploadBtn"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        IsChecked="{Binding IsSolo}"
+                        Content="📁"
+                        HorizontalAlignment="Right"/>
+           </StackPanel>
+          
+        </Grid> <!--end left buttons-->
         <!-- Fader -->
-        <Border Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <Border Grid.Column="2" Grid.Row="0" Grid.RowSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center">
           <Slider Orientation="Vertical"
                   Height="40"
                   Width="20"
@@ -207,21 +267,6 @@
                   Value="{Binding Volume}"
                   Style="{StaticResource MetalFaderStyle}"/>
         </Border>
-
-        <!-- Record and shi -->
-        <StackPanel Grid.Column="2" VerticalAlignment="Center" Margin="4">
-          <ToggleButton x:Name="TrackRecordBtn"
-                        Background="Transparent"
-                        BorderThickness="0"
-                        IsChecked="{Binding IsMuted}"
-                        Content="🔴"
-                        Foreground="Red"/>
-          <ToggleButton x:Name="TrackStopBtn"
-                        Background="Transparent"
-                        BorderThickness="0"
-                        IsChecked="{Binding IsSolo}"
-                        Content="⏹"/>
-          </StackPanel>
       </Grid>
     </Grid>
 
