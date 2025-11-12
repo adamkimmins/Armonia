@@ -34,7 +34,7 @@ UI is focused on clarity, warmth, and familiarity. Designed with grassroots insp
 
 | Layer                | Technology                                        |
 | :------------------- | :------------------------------------------------ |
-| **Frontend / UI**    | WPF (.NET 8), XAML, C# MVVM                   |
+| **Frontend / UI**    | WPF (.NET 8), XAML, C# MVVM                       |
 | **Audio Processing** | NAudio (WasapiCapture), custom waveform rendering |
 | **Storage**          | Local `/projects` structure → future cloud API    |
 
@@ -50,21 +50,21 @@ UI is focused on clarity, warmth, and familiarity. Designed with grassroots insp
 * Working **toolbar logic** and animation smoothing for clean transitions and scaling.
 * Polished **Italian-inspired beige/brown UI theme** consistent across views.
 
-#### **🎧 Audio & Visualization**
+#### **Audio & Visualization**
 
 * Live audio capture through **WasapiCapture** integrated on RecordPage.
 * Functional **waveform visualizer** (realistic gold bar wave display) that reacts in real time to input amplitude using my own C# logic (thanks to NAudio).
 * Core **waveform rendering pipeline** complete, I use for both live recording and static display in Composer.
 * Waveform coloration, gradient, and scaling now visually refined and tested.
 
-#### **🎵 Composer Framework**
+#### **Composer Framework**
 
 * Semi-functional **Composer section** with dynamic lanes and timeline integration.
 * Configurable **horizontal BPM wheel** with realistic knob UI.
 * Dynamic **track rows** with mute/solo buttons, realistic fader sliders, and add/remove logic.
 * Hook system linking the **RecordPage output** and **Composer** base architecture for eventual “Push-to-Composer” feature.
 
-#### **🧠 Architecture & Framework**
+#### **Architecture & Framework**
 
 * MVVM architecture with `BindableBase`, `ClipViewModel`, `TrackViewModel`, and `ComposerViewModel`.
 * Modular control structure (`TrackRow`, `TrackAddRow`, `TimelineControl`, `ComposerControl`) ensuring scalability and clear separation.
@@ -82,22 +82,3 @@ UI is focused on clarity, warmth, and familiarity. Designed with grassroots insp
 * Theme engine (light, dark, rustic modes)
 
 ---
-
-## 🤝 **Contributing**
-
-Contributions will be open post-Alpha (ETA: late 2025).
-For now, internal collaborators can:
-
-* Submit **issues or enhancement ideas**
-* Test early builds for usability and stability
-* Suggest UX refinements (especially visual/audio sync)
-
----
-
-## 🧾 **License**
-
-MIT License — Free for personal and commercial use.
-Attribution recommended.
-
----
-
