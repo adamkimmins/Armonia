@@ -1,4 +1,4 @@
-## 🪶🪕🎻 **A.R.M.O.N.I.A.**
+## 🪕🎻 **A.R.M.O.N.I.A.**
 
 **Advanced Recording & Media Organizer for Natural Integrated Audio**
 
@@ -9,7 +9,7 @@ Designed for independent artists, songwriters, and smaller producers who want *c
 ### *In Pre-Development*
 ---
 
-## 🎯 **Purpose**
+## **Purpose**
 
 ### Problems Armonia Aims to Solve
 
@@ -23,14 +23,14 @@ Designed for independent artists, songwriters, and smaller producers who want *c
 | **6** | **Localization**           | An eventual Language localization for both English and l'Italiano. Dopotutto il nome è italiano.                                                                                        |
 
 
-## 🧠 **Design Philosophy**
+## **Design Philosophy**
 
 Armonia aims to emulate the **feel of coding in a music IDE**; a calm, expressive space where your workflow has space to breathe.
 UI is focused on clarity, warmth, and familiarity. Designed with grassroots inspiration and minimalism.
 
 ---
 
-## 🔍 **Tech Stack**
+## **Tech Stack**
 
 | Layer                | Technology                                        |
 | :------------------- | :------------------------------------------------ |
@@ -40,9 +40,9 @@ UI is focused on clarity, warmth, and familiarity. Designed with grassroots insp
 
 ---
 
-## 🎼 **Development Progress**
+## **Development Progress**
 
-#### **🎛 Interface & Layout**
+#### **Interface & Layout**
 
 * Fully designed **Record Page**, **Composer**, and **Lyrics** sections.
 * Responsive **Record–Composer–Lyrics** layout with a dynamic divider.
