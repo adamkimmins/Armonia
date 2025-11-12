@@ -7,6 +7,7 @@ exorbitant professional digital audio workstations (DAWs) and free, but more com
 Designed for independent artists, songwriters, and smaller producers who want *control* without *clutter*.
 
 ### *In Pre-Development*
+
 ---
 
 ## **Purpose**
@@ -22,11 +23,10 @@ Designed for independent artists, songwriters, and smaller producers who want *c
 | **5** | **Project Storage**        | Future plans include a limited cloud database for polished projects. Users can store, retrieve, and remix anywhere.                                                                     |
 | **6** | **Localization**           | An eventual Language localization for both English and l'Italiano. Dopotutto il nome è italiano.                                                                                        |
 
-
 ## **Design Philosophy**
 
-Armonia aims to emulate the **feel of coding in a music IDE**; a calm, expressive space where your workflow has space to breathe.
-UI is focused on clarity, warmth, and familiarity. Designed with grassroots inspiration and minimalism.
+Armonia aims to emulate the **feel of grassroots in a music IDE**; a calm, expressive space where your workflow has space to breathe.
+UI is focused on clarity, warmth, and familiarity. Designed with earthy and clean inspiration and minimalism.
 
 ---
 
@@ -34,7 +34,7 @@ UI is focused on clarity, warmth, and familiarity. Designed with grassroots insp
 
 | Layer                | Technology                                        |
 | :------------------- | :------------------------------------------------ |
-| **Frontend / UI**    | WPF (.NET 8), XAML, C# MVVM                       |
+| **Frontend / UI**    | .NET 8 Framework, WPF MVVM , XAML, C#             |
 | **Audio Processing** | NAudio (WasapiCapture), custom waveform rendering |
 | **Storage**          | Local `/projects` structure → future cloud API    |
 
@@ -48,7 +48,7 @@ UI is focused on clarity, warmth, and familiarity. Designed with grassroots insp
 * Responsive **Record–Composer–Lyrics** layout with a dynamic divider.
 * Record and Composer **Control Buttons** (Play, Stop, Record) with active-state animations.
 * Working **toolbar logic** and animation smoothing for clean transitions and scaling.
-* Polished **Italian-inspired beige/brown UI theme** consistent across views.
+* Polished **Italian-inspired brown UI theme with gold accents** consistent across views.
 
 #### **Audio & Visualization**
 
