@@ -1,4 +1,6 @@
-## 🪕🎻 **A.R.M.O.N.I.A.**
+##  **A.R.M.O.N.I.A.**
+
+<img width="54" height="54" alt="Woodguitarstraight" src="https://github.com/user-attachments/assets/adffeb96-f51d-487a-82ba-29c88f006bb2" />
 
 **Advanced Recording & Media Organizer for Natural Integrated Audio**
 
@@ -82,3 +84,4 @@ UI is focused on clarity, warmth, and familiarity. Designed with earthy and clea
 * Theme engine (light, dark, rustic modes)
 
 ---
+<img width="1024" height="1024" alt="ArmoniaOrangey" src="https://github.com/user-attachments/assets/5eb0d85c-8f5e-4622-9e08-0fa85ffb26a3" />
