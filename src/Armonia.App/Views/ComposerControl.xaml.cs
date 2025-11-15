@@ -39,14 +39,23 @@ namespace Armonia.App.Views
                 if (ViewModel == null)
                     ViewModel = new ComposerViewModel();
 
-                // ViewModel.InitDefaultTracks(4);
+                // ViewModel.RequestTrackRowCreation += HandleAutoTrackCreation; //Pushtocomposer
+
                 InitMetalButtons();
                 InitializeTracks();
-
                 ClampToWindowEdge();
             };
             //Testing TODO
             SizeChanged += (s, e) => ClampToWindowEdge();
+        }
+
+        public void AttachComposerVM(ComposerViewModel vm)
+        {
+            if (ViewModel != null)
+            ViewModel.RequestTrackRowCreation -= HandleAutoTrackCreation; //f da doub
+
+            DataContext = vm;
+            vm.RequestTrackRowCreation += HandleAutoTrackCreation;
         }
 
         private void OnPlayClick(object sender, RoutedEventArgs e)
@@ -88,6 +97,14 @@ namespace Armonia.App.Views
             TracksPanel.Children.Insert(TracksPanel.Children.Count - 1, trackRow);
         }
 
+        private void HandleAutoTrackCreation(TrackViewModel vm)
+        {
+            var row = new TrackRow();
+            row.HookTrack(vm);
+
+            TracksPanel.Children.Insert(TracksPanel.Children.Count - 1, row);
+        }
+            
         private Brush StopGoldBrush()
         {
             var gradient = new LinearGradientBrush
@@ -169,85 +186,6 @@ namespace Armonia.App.Views
 
 
         }
-
-        // private void StartShine(Shape glyph) //turned off
-        // {
-        //     if (glyph.Fill is not GradientBrush brush) return;
-
-        //     if (brush is RadialGradientBrush radial)
-        //     {
-        //         // Animate the "light source" moving across the button
-        //         var animX = new DoubleAnimation
-        //         {
-        //             From = 1.0,
-        //             To = 0.0,
-        //             Duration = TimeSpan.FromSeconds(1.5),
-        //             RepeatBehavior = RepeatBehavior.Forever,
-        //             AutoReverse = false,
-        //             EasingFunction = new SineEase { EasingMode = EasingMode.EaseInOut }
-        //         };
-
-        //         var animY = new DoubleAnimation
-        //         {
-        //             From = 0.0,
-        //             To = 1.0,
-        //             Duration = TimeSpan.FromSeconds(2.5),
-        //             RepeatBehavior = RepeatBehavior.Forever,
-        //             AutoReverse = true,
-        //             EasingFunction = new SineEase { EasingMode = EasingMode.EaseInOut }
-        //         };
-
-        //         // Animate both center and gradient origin to simulate moving light
-        //         radial.BeginAnimation(RadialGradientBrush.CenterProperty,
-        //             new PointAnimation(new Point(0.2, 0.2), new Point(0.8, 0.8),
-        //                 new Duration(TimeSpan.FromSeconds(2.5)))
-        //             {
-        //                 RepeatBehavior = RepeatBehavior.Forever,
-        //                 AutoReverse = true,
-        //                 EasingFunction = new SineEase { EasingMode = EasingMode.EaseInOut }
-        //             });
-
-        //         radial.BeginAnimation(RadialGradientBrush.GradientOriginProperty,
-        //             new PointAnimation(new Point(0.0, 0.0), new Point(1.0, 1.0),
-        //                 new Duration(TimeSpan.FromSeconds(2.5)))
-        //             {
-        //                 RepeatBehavior = RepeatBehavior.Forever,
-        //                 AutoReverse = true,
-        //                 EasingFunction = new SineEase { EasingMode = EasingMode.EaseInOut }
-        //             });
-
-        //         return; // stop here if it's radial — handled separately
-        //     }
-
-        //     // ✅ Linear gradient path (Stop button, etc.)
-        //     if (brush.GradientStops.Count >= 5)
-        //     {
-        //         var streak1 = brush.GradientStops[3];
-        //         var streak2 = brush.GradientStops[4];
-
-        //         var anim1 = new DoubleAnimation
-        //         {
-        //             From = -0.3,
-        //             To = 1.3,
-        //             Duration = TimeSpan.FromSeconds(0.5),
-        //             RepeatBehavior = RepeatBehavior.Forever,
-        //             EasingFunction = new SineEase { EasingMode = EasingMode.EaseInOut }
-        //         };
-
-        //         var anim2 = new DoubleAnimation
-        //         {
-        //             From = -0.28,
-        //             To = 1.32,
-        //             Duration = TimeSpan.FromSeconds(2.5),
-        //             RepeatBehavior = RepeatBehavior.Forever,
-        //             EasingFunction = new SineEase { EasingMode = EasingMode.EaseInOut }
-        //         };
-
-        //         streak1.BeginAnimation(GradientStop.OffsetProperty, anim1);
-        //         streak2.BeginAnimation(GradientStop.OffsetProperty, anim2);
-        //     }
-        // }
-
 
         // Call this once when the control is ready
         private void InitMetalButtons()

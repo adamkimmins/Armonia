@@ -14,8 +14,8 @@ namespace Armonia.App.Controls
 
         private readonly DispatcherTimer _timer;
         private Stopwatch _stopwatch = new();
-        private double _scrollOffset = 0;
         private bool _isPlaying = false;
+        
 
         public static readonly DependencyProperty BpmProperty =
             DependencyProperty.Register(nameof(Bpm), typeof(int), typeof(TimelineControl),
@@ -56,8 +56,8 @@ namespace Armonia.App.Controls
             double beatPos = elapsed / SecondsPerBeat;
             double pixelX = beatPos * PixelsPerBeat;
 
-            if (pixelX > ActualWidth - 100)
-                _scrollOffset = pixelX - (ActualWidth - 100);
+            // if (pixelX > ActualWidth - 100)
+            //     _scrollOffset = pixelX - (ActualWidth - 100);
 
             UpdatePlayhead(pixelX);
             UpdateTimeDisplay(elapsed);
@@ -72,7 +72,7 @@ namespace Armonia.App.Controls
 
         private void UpdatePlayhead(double x)
         {
-            Canvas.SetLeft(SeekThumb, x - _scrollOffset);
+            Canvas.SetLeft(SeekThumb, x);
         }
 
         private void Draw()
@@ -80,12 +80,12 @@ namespace Armonia.App.Controls
             if (Layer == null) return;
             Layer.Children.Clear();
 
-            double totalWidth = 5000; // way beyond visible area
+            double totalWidth = ActualWidth > 0 ? ActualWidth : 1200;
             int totalBeats = (int)(totalWidth / PixelsPerBeat);
 
             for (int i = 0; i < totalBeats; i++)
             {
-                double x = i * PixelsPerBeat - _scrollOffset;
+                double x = i * PixelsPerBeat;
 
                 // Beat line
                 var line = new Rectangle
@@ -115,7 +115,7 @@ namespace Armonia.App.Controls
         public void Start()
         {
             _isPlaying = true;
-            _scrollOffset = 0;
+            // _scrollOffset = 0;
             _stopwatch.Restart();
             _timer.Start();
         }
@@ -124,7 +124,7 @@ namespace Armonia.App.Controls
         {
             _isPlaying = false;
             _stopwatch.Reset();
-            _scrollOffset = 0;
+            // _scrollOffset = 0;
             _timer.Stop();
             UpdateTimeDisplay(0);
             UpdatePlayhead(0);

@@ -16,6 +16,7 @@ using Microsoft.Win32;
 using Armonia.App.Services;
 using Armonia.App.ViewModels;
 using IOPath = System.IO.Path;
+using NAudio.Wave;
 using Windows.Media.Capture.Core;
 using Windows.Graphics.Printing.PrintTicket; // TODO
 
@@ -63,19 +64,23 @@ namespace Armonia.App.Views
         private const double TICK_HEIGHT = 10.0;
         private const double LABEL_OFFSET_Y = 4.0;
         private readonly Stopwatch _recordingClock = new();
-        //For pushing to Composer
-        public ComposerViewModel SharedComposerVM { get; } = new();
-        
-        //TESTING TODO
-        private const double COMPOSER_LEFT_STOP = 100.0;
 
+        //For pushing to Composer TODO
+        // public ComposerViewModel SharedComposerVM { get; } = new();    
+        public ComposerViewModel SharedComposerVM { get; }
 
         //----------------
         // Constructor
         //----------------
-        public RecordPage()
+        public RecordPage(ComposerViewModel sharedVM)
         {
+            //TODO
+            SharedComposerVM = sharedVM;
+
             InitializeComponent();
+
+            ComposerSection.AttachComposerVM(SharedComposerVM);
+
 
             //composer
             // ComposerSection.ViewModel = SharedComposerVM;
@@ -433,6 +438,8 @@ namespace Armonia.App.Views
             _levels.Clear();
             WaveformCanvas.Children.Clear();
             _cursorX = 0;
+
+            
             _hasHitThreshold = false;
             _capacityBars = 0;
         }
@@ -474,14 +481,32 @@ namespace Armonia.App.Views
                 AudioProcessingService.NormalizeWave(_currentFilePath, normalizedPath);
             });
 
+            //todo counter
+            double duration;
+
+            using (var reader = new AudioFileReader(normalizedPath))
+                duration = reader.TotalTime.TotalSeconds;
+
+            //Create cliper
             var clip = new ClipViewModel
             {
                 Name = IOPath.GetFileNameWithoutExtension(normalizedPath),
-                BeatsLength = 8
+                // BeatsLength = 8,
+                FilePath = normalizedPath,
+                DurationSeconds = duration
             };
 
             // send into composer
-            SharedComposerVM.AddClipToTrack("Input", clip);
+            var trackVM = new TrackViewModel($"Track {SharedComposerVM.Tracks.Count + 1}");
+            SharedComposerVM.Tracks.Add(trackVM);
+
+            // 2. Add the clip to this track
+            trackVM.Clips.Add(clip);
+
+            // 3. Ask politely (ComposerControl) to render a new TrackRow
+            SharedComposerVM.NotifyTrackRowCreation(trackVM);
+            // SharedComposerVM.AddClipToTrack("Mic", clip);
+
 
             ResetRecording(); // reset UI
         }

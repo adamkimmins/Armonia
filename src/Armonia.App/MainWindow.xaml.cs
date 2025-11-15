@@ -8,6 +8,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using Armonia.App.Views;
 using Armonia.App.Services;
+using Armonia.App.ViewModels;
 
 namespace Armonia.App
 {
@@ -18,6 +19,10 @@ namespace Armonia.App
             InitializeComponent();
             Loaded += MainWindow_Loaded;
         }
+
+        //TODO
+        private readonly ComposerViewModel _composerVM = new ComposerViewModel();
+
 
         // 🧭 Shared Navigation Helper
         private async Task TryNavigateToAsync(UserControl targetPage)
@@ -64,7 +69,8 @@ namespace Armonia.App
 
         private async void CreateNew_Click(object sender, RoutedEventArgs e)
         {
-            await TryNavigateToAsync(new RecordPage());
+            // await TryNavigateToAsync(new RecordPage());
+            await TryNavigateToAsync(new RecordPage(_composerVM));
         }
 
         private async void Settings_Click(object sender, RoutedEventArgs e)

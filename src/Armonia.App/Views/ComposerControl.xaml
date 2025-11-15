@@ -193,7 +193,9 @@
 
                 <!-- Track hook -->
         <ScrollViewer Grid.Row="2"
-                    VerticalScrollBarVisibility="Auto"
+                    VerticalScrollBarVisibility="Disabled"
+                    HorizontalScrollBarVisibility="Auto"
+                    CanContentScroll="False"
                     Background="#d6b995">
             <StackPanel x:Name="TracksPanel"
                         Orientation="Vertical"

@@ -7,10 +7,14 @@ namespace Armonia.App.ViewModels
     {
         public string Id { get; set; } = Guid.NewGuid().ToString();
         public string Name { get; set; } = "Audio";
-        public double StartBeat { get; set; } = 0;   // where it sits on the timeline
-        public double BeatsLength { get; set; } = 8; // duration in beats
-        public Color Color { get; set; } = Colors.DodgerBlue;
+        public double StartBeat { get; set; } = 0;
+        public double DurationSeconds { get; set; } = 0;
+        public double BeatsLength { get; set; } = 8;
+        public Color Color { get; set; } = Colors.Blue;
 
-        // later: link to audio buffer / midi data
+        // Required for waveform display + playback
+        public string FilePath { get; set; } = string.Empty;
+        //wavefor
+        public float[]? Samples { get; set; }
     }
 }

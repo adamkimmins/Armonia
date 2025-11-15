@@ -2,11 +2,21 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Linq;
+using System;
 
 namespace Armonia.App.ViewModels
 {
     public class ComposerViewModel : BindableBase
     {
+
+        //TODO
+        public event Action<TrackViewModel>? RequestTrackRowCreation;
+
+        public void NotifyTrackRowCreation(TrackViewModel vm)
+        {
+            RequestTrackRowCreation?.Invoke(vm);
+        }
+        
         // Core bindable properties
         private int _bpm = 120;
         

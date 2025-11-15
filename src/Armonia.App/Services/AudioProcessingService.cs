@@ -1,13 +1,13 @@
 using System;
 using System.Linq;
 using NAudio.Wave;
-using System.IO;
+using System.Collections.Generic;
 
 namespace Armonia.App.Services
 {
     public static class AudioProcessingService
     {
-        // Example: quick normalization (placeholder logic)
+        // quick normalization (placeholder while I bang my head on the wall)
         public static void NormalizeWave(string inputPath, string outputPath)
         {
             using var reader = new AudioFileReader(inputPath);
@@ -26,6 +26,21 @@ namespace Armonia.App.Services
                 for (int i = 0; i < read; i++) buffer[i] *= gain;
                 writer.WriteSamples(buffer, 0, read);
             }
+        }
+
+        //Clip wave amp
+        public static float[] LoadWaveformSamples(string path)
+        {
+            using var reader = new AudioFileReader(path);
+            List<float> samples = new List<float>();
+
+            float[] buffer = new float[reader.WaveFormat.SampleRate];
+            int read;
+
+            while ((read = reader.Read(buffer, 0, buffer.Length)) > 0)
+                samples.AddRange(buffer.Take(read));
+
+            return samples.ToArray();
         }
     }
 }
