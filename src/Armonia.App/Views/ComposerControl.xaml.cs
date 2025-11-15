@@ -77,10 +77,12 @@ namespace Armonia.App.Views
             ViewModel.Tracks.Add(newTrackVM);
 
             // Create a visual row and "hook" its DataContext to the model
-            var trackRow = new TrackRow
-            {
-                DataContext = newTrackVM
-            };
+            // var trackRow = new TrackRow
+            // {
+            //     DataContext = newTrackVM
+            // };
+            var trackRow = new TrackRow();
+            trackRow.HookTrack(newTrackVM); //TODO
 
             // Insert above the AddTrackRow (so the "+" stays at the bottom)
             TracksPanel.Children.Insert(TracksPanel.Children.Count - 1, trackRow);

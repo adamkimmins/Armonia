@@ -43,11 +43,11 @@
             </Setter>
         </Style>
 
-        <!-- subtle golden reflection for hover -->
+        <!-- subtle golden reflection for hover TODO-->
         <LinearGradientBrush x:Key="HoverShineBrush" StartPoint="0,0" EndPoint="1,1">
-            <GradientStop Color="#00FFFFFF" Offset="0.0"/>
-            <GradientStop Color="#33FFF3B0" Offset="0.35"/>
-            <GradientStop Color="#22FFFFFF" Offset="1.0"/>
+            <GradientStop Color="#00FFFF" Offset="0.0"/>
+            <GradientStop Color="#33FFF3" Offset="0.35"/>
+            <GradientStop Color="#22FFFF" Offset="1.0"/>
         </LinearGradientBrush>
 
         <!-- Drop shadow -->

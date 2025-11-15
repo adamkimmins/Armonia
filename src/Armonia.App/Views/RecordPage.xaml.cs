@@ -30,6 +30,7 @@ namespace Armonia.App.Views
         private bool _isRecording = false;
         private bool _isPaused = false;
         private bool _hasRecording = false;
+        private bool _isFinalizing = false; 
         private string _currentFilePath = "";
 
         // Toolbar & unsaved
@@ -295,7 +296,7 @@ namespace Armonia.App.Views
         private Brush CreatePBRGoldBrush(double intensity)
         {
             // intensity = normalized height (0–1)
-            // We'll bias bright colors based on how tall the bar is
+            // StackOverflow lied this feature sucks
             double brightBoost = 0.5 + (intensity * 0.5);
 
             var gradient = new LinearGradientBrush
@@ -335,8 +336,14 @@ namespace Armonia.App.Views
         {
             if (_isRecording)
                 StopRecording();
+            else if (_isFinalizing)
+            {
+                MessageBox.Show("LOL boy.");
+            }
             else if (_hasRecording)
+            {
                 PushToComposer();
+            }
         }
 
         private void StartRecording()
@@ -384,6 +391,7 @@ namespace Armonia.App.Views
             _recorder.StopRecording();
             _isRecording = false;
             _hasRecording = true;
+            _isFinalizing = true; 
             _waveformTimer.Stop(); 
             _recordingClock.Restart();
 
@@ -427,14 +435,12 @@ namespace Armonia.App.Views
             _cursorX = 0;
             _hasHitThreshold = false;
             _capacityBars = 0;
-            // _movingForward = true;
         }
 
         private void ResetRecording()
         {
             if (File.Exists(_currentFilePath)) //Doesnt delete Files properly TODO
                 File.Delete(_currentFilePath);
-            _recorder.StopRecording();
             _isRecording = false;
             _isPaused = false;
             _hasRecording = false;
@@ -443,105 +449,48 @@ namespace Armonia.App.Views
 
             LeftButton.Content = "⏺";
             LeftButton.Style = (Style)FindResource("RecordButtonStyle");
-            // LeftButton.Foreground = Brushes.Red;
-            // LeftButton.FontSize = 35;
+
             RightButton.Content = "⏹";
             RightButton.Style = (Style)FindResource("StopButtonStyle");
             RightButton.Foreground = Brushes.Gray;
-            // RightButton.FontSize = 26;
             RightButton.IsEnabled = false;
         }
-
-        // private void PushToComposer()
-        // {
-        //     if (!_hasRecording)
-        //     {
-        //         MessageBox.Show("No recording available to send.", "Armonia");
-        //         return;
-        //     }
-
-        //     OnRecordingFinished(this, _currentFilePath);
-        //     ResetRecording();
-        // }
-        private void PushToComposer()
+        private async void PushToComposer()
         {
-            if (!_hasRecording)
+            if (!_hasRecording || !File.Exists(_currentFilePath))
             {
-                MessageBox.Show("No recording available to send.", "Armonia");
+                MessageBox.Show("No finished recording.");
                 return;
             }
 
-            // if (ComposerSection?.ViewModel == null)
-            // {
-            //     MessageBox.Show("Composer section not initialized yet.", "Armonia");
-            //     return;
-            // }
+            string normalizedPath = IOPath.Combine(
+                IOPath.GetDirectoryName(_currentFilePath)!,
+                IOPath.GetFileNameWithoutExtension(_currentFilePath) + "_cutenormalized.wav");
 
-            OnRecordingFinished(this, _currentFilePath);
-            ResetRecording();
+            // AudioProcessingService.NormalizeWave(_currentFilePath, normalizedPath);
+
+            await Task.Run(() =>
+            {
+                AudioProcessingService.NormalizeWave(_currentFilePath, normalizedPath);
+            });
+
+            var clip = new ClipViewModel
+            {
+                Name = IOPath.GetFileNameWithoutExtension(normalizedPath),
+                BeatsLength = 8
+            };
+
+            // send into composer
+            SharedComposerVM.AddClipToTrack("Input", clip);
+
+            ResetRecording(); // reset UI
         }
-
-        
-        // Actually push to composer, not just button, and normalize
-        // private void OnRecordingFinished(object? sender, string filePath)
-        // {
-        //     try
-        //     {
-        //         // Normalize the audio
-        //         string normalizedPath = IOPath.Combine(
-        //             IOPath.GetDirectoryName(filePath)!,
-        //             IOPath.GetFileNameWithoutExtension(filePath) + "_normalized.wav");
-
-        //         AudioProcessingService.NormalizeWave(filePath, normalizedPath);
-
-        //         // Create a clip viewmodel entry for composer
-        //         var clip = new ClipViewModel
-        //         {
-        //             Name = IOPath.GetFileNameWithoutExtension(normalizedPath),
-        //             BeatsLength = 8 // optional: estimate from audio length later
-        //         };
-
-        //         // Send it to composer and play
-        //         ComposerSection.ViewModel.AddClipToTrack("Voice", clip);
-        //         ComposerSection.ViewModel.TransportPlay();
-
-        //         Debug.WriteLine($"Recording pushed to composer: {normalizedPath}");
-        //     }
-        //     catch (Exception ex)
-        //     {
-        //         MessageBox.Show($"Error pushing recording to composer:\n{ex.Message}",
-        //                         "Composer Integration", MessageBoxButton.OK, MessageBoxImage.Error);
-        //     }
-        // }
 
         private void OnRecordingFinished(object? sender, string filePath)
         {
-            try
-            {
-                string normalizedPath = IOPath.Combine(
-                    IOPath.GetDirectoryName(filePath)!,
-                    IOPath.GetFileNameWithoutExtension(filePath) + "_cutenormalized.wav");
-
-                AudioProcessingService.NormalizeWave(filePath, normalizedPath);
-
-                var clip = new ClipViewModel
-                {
-                    Name = IOPath.GetFileNameWithoutExtension(normalizedPath),
-                    BeatsLength = 8
-                };
-
-                // Update Composer UI safely
-                Dispatcher.Invoke(() =>
-                {
-                    SharedComposerVM.AddClipToTrack("Voice", clip);
-                    SharedComposerVM.TransportPlay();
-                });
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error pushing recording to composer:\n{ex.Message}",
-                                "Composer Integration", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            _isFinalizing = false;
+            _hasRecording = true;
+            _currentFilePath = filePath;
         }
 
 
@@ -666,28 +615,6 @@ namespace Armonia.App.Views
             (Application.Current.MainWindow as MainWindow)!.MainFrame.Content = new SettingsPage();
         }
 
-
-        //TESTING TODO
-
-        private void ClampComposerPosition()
-        {
-            if (ComposerSection == null || ComposerSection.ComposerTranslateTransform == null)
-                return;
-
-            // Get the composer’s position relative to the full window
-            GeneralTransform transform = ComposerSection.TransformToAncestor(Window.GetWindow(this));
-            Point composerPos = transform.Transform(new Point(0, 0));
-
-            double leftEdge = composerPos.X + ComposerSection.ComposerTranslateTransform.X;
-
-            // If it’s closer than 100px from the window edge, clamp it
-            if (leftEdge < COMPOSER_LEFT_STOP)
-            {
-                double correction = COMPOSER_LEFT_STOP - composerPos.X;
-                ComposerSection.ComposerTranslateTransform.X = correction;
-            }
-        }
-
         //----------------
         // MIDI Add
         //----------------
@@ -737,28 +664,6 @@ namespace Armonia.App.Views
             return Task.FromResult(proceed);
         }
 
-
-        // public async Task<bool> ConfirmExitWithUnsavedChanges()
-        // {
-        //     if (!_unsavedChanges)
-        //         return true;
-
-        //     var result = MessageBox.Show(
-        //         "You have unsaved changes.\nWould you like to save before leaving?",
-        //         "Armonia", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
-
-        //     switch (result)
-        //     {
-        //         case MessageBoxResult.Yes:
-        //             SaveCurrentProject();
-        //             return true;
-        //         case MessageBoxResult.No:
-        //             return true;
-        //         default:
-        //             return false;
-        //     }
-        // }
-
         //----------------
         // Lyrics Editor
         //----------------
@@ -767,7 +672,7 @@ namespace Armonia.App.Views
             _unsavedChanges = true;
         }
 
-        // 📂 Open Lyrics File
+        // Open Lyrics File
         private void OpenLyricsButton_Click(object sender, RoutedEventArgs e)
         {
             var dialog = new OpenFileDialog
@@ -792,7 +697,7 @@ namespace Armonia.App.Views
             }
         }
 
-        // 💾 Save Lyrics File
+        // Save Lyrics File
         private void SaveLyricsButton_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -818,7 +723,7 @@ namespace Armonia.App.Views
             }
         }
 
-        // 🌀 Toolbar Click (close when background clicked)
+        // Toolbar Click (close when background clicked)
         private void Toolbar_Click(object sender, MouseButtonEventArgs e)
         {
             if (_toolbarVisible)
@@ -834,8 +739,6 @@ namespace Armonia.App.Views
 
             (Application.Current.MainWindow as MainWindow)?.GoHome();
         }
-
-
     }
 }
 

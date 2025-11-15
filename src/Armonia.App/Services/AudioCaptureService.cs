@@ -70,7 +70,7 @@ namespace Armonia.App.Services
             try
             {
                 _waveIn?.StopRecording(); // triggers RecordingStopped -> cleanup
-                 RecordingCompleted?.Invoke(this, _currentFilePath!); // fire after stop
+                //  RecordingCompleted?.Invoke(this, _currentFilePath!); 
             }
             catch
             {
@@ -112,6 +112,8 @@ namespace Armonia.App.Services
 
         private void OnRecordingStopped(object? sender, StoppedEventArgs e)
         {
+            if (_currentFilePath != null)
+                RecordingCompleted?.Invoke(this, _currentFilePath);
             Cleanup();
         }
 

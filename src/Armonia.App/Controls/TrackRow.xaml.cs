@@ -1,95 +1,9 @@
-// using System;
-// using System.Windows;
-// using System.Windows.Controls;
-// using System.Windows.Input;
-// using System.Windows.Media;
-// using System.Windows.Shapes;
-// using Armonia.App.ViewModels;
-
-// namespace Armonia.App.Controls
-// {
-//     public partial class TrackRow : UserControl
-//     {
-//         public event EventHandler? DragDropCompleted;
-
-//         public double BeatPixels { get; set; } = 80;
-//         public double Zoom { get; set; } = 1;
-//         public double PlayheadX { get; set; }
-
-//         public TrackRow()
-//         {
-//             InitializeComponent();
-//             Loaded += (_, __) => Redraw();
-//         }
-
-//         private TrackViewModel? VM => DataContext as TrackViewModel;
-
-//         private void Redraw()
-//         {
-//             if (VM == null || Lane == null) return;
-//             Lane.Children.Clear();
-
-//             foreach (var clip in VM.Clips)
-//             {
-//                 var rect = new Rectangle
-//                 {
-//                     Height = 56,
-//                     Width = clip.BeatsLength * BeatPixels * Zoom,
-//                     Fill = new SolidColorBrush(Colors.SteelBlue),
-//                     Stroke = Brushes.Black,
-//                     StrokeThickness = 1
-//                 };
-//                 Canvas.SetLeft(rect, clip.StartBeat * BeatPixels * Zoom);
-//                 Canvas.SetTop(rect, 12);
-
-//                 rect.MouseDown += Rect_MouseDown;
-//                 rect.MouseMove += Rect_MouseMove;
-//                 rect.MouseUp += Rect_MouseUp;
-//                 Lane.Children.Add(rect);
-//             }
-//         }
-
-//         private (Rectangle rect, ClipViewModel clip, double startX)? _dragging;
-
-//         private void Rect_MouseDown(object sender, MouseButtonEventArgs e)
-//         {
-//             if (sender is Rectangle rect && VM != null)
-//             {
-//                 var clip = VM.Clips[0];
-//                 _dragging = (rect, clip, e.GetPosition(Lane).X);
-//                 rect.CaptureMouse();
-//             }
-//         }
-
-//         private void Rect_MouseMove(object sender, MouseEventArgs e)
-//         {
-//             if (_dragging is null || e.LeftButton != MouseButtonState.Pressed) return;
-//             var (rect, clip, startX) = _dragging.Value;
-//             var x = e.GetPosition(Lane).X;
-//             var delta = x - startX;
-//             double newLeft = Math.Max(0, clip.StartBeat * BeatPixels * Zoom + delta);
-//             Canvas.SetLeft(rect, newLeft);
-//         }
-
-//         private void Rect_MouseUp(object sender, MouseButtonEventArgs e)
-//         {
-//             if (_dragging is null) return;
-//             _dragging = null;
-//             (sender as Rectangle)?.ReleaseMouseCapture();
-//             DragDropCompleted?.Invoke(this, EventArgs.Empty);
-//         }
-
-//         private void Lane_MouseDown(object sender, MouseButtonEventArgs e)
-//         {
-//             PlayheadX = e.GetPosition(Lane).X;
-//         }
-//     }
-// }
-
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using Armonia.App.ViewModels;
+using System.Collections.Specialized;
 
 namespace Armonia.App.Controls
 {
@@ -100,6 +14,8 @@ namespace Armonia.App.Controls
             InitializeComponent();
             Loaded += (_, __) => Redraw();
         }
+
+        private TrackViewModel? VM => DataContext as TrackViewModel;
 
         // ===== Rename handling =====
         private void EnterEdit()
@@ -136,7 +52,7 @@ namespace Armonia.App.Controls
         private void NameEditor_LostFocus(object sender, RoutedEventArgs e) => ExitEdit(true);
 
         // ===== Lane rendering (based on your existing pattern) =====
-        private ViewModels.TrackViewModel? VM => DataContext as ViewModels.TrackViewModel;
+        // private ViewModels.TrackViewModel? VM => DataContext as ViewModels.TrackViewModel;
 
         private void Redraw()
         {
@@ -158,6 +74,17 @@ namespace Armonia.App.Controls
                 Canvas.SetTop(rect, 12);
                 Lane.Children.Add(rect);
             }
+        }
+
+        //Hooker
+        public void HookTrack(TrackViewModel vm)
+        {
+            DataContext = vm;
+
+            if (vm.Clips is INotifyCollectionChanged coll)
+                coll.CollectionChanged += (_, __) => Redraw();
+            
+            Redraw();
         }
     }
 }
