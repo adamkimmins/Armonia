@@ -1,60 +1,87 @@
-# A.R.M.O.N.I.A.
-Advanced Recording &amp; Media Organizer for Natural Integrated Audio, shortened to Armonia, is a music composition environment designed to offer a better balance for people attempting to compose music. WIP, Open-Source.
+##  **A.R.M.O.N.I.A.**
 
-# Purpose
-The problems my app hopes to solve for DAWs
-- #1 is scalability. Most DAWs are massive, computer only apps or sites that cluttered and overpopulated. The clutter leads to intimidation which can scare away beginners
-- #2 is price, no one wants to pay hundreds of dollars to have an EQ editor, or MIDI control.
-- #3 Is solo workflow. For artists seeking to create their own songs, rather than producers making a melody to sell. This includes more artistic features, like a lyrics editor.
-- #4 Have a database for users to store their polished/better projects, limited.
-- #5 Use this database to make an iPhone app version of Armonia to allow users to edit their projects where ever.
+<img width="54" height="54" alt="Woodguitarstraight" src="https://github.com/user-attachments/assets/adffeb96-f51d-487a-82ba-29c88f006bb2" />
 
+**Advanced Recording & Media Organizer for Natural Integrated Audio**
 
+A.R.M.O.N.I.A. (Italian for *Harmony*) is an open-source digital audio environment built to bridge the gap between 
+exorbitant professional digital audio workstations (DAWs) and free, but more complex, audio tools.
+Designed for independent artists, songwriters, and smaller producers who want *control* without *clutter*.
 
----
-# Path to creation >> Documentation >> Controls
-xxx
+### *In Pre-Development*
 
 ---
-# Path to creation >> Documentation >> Journal
 
-This is my first real solo project where I dig low into the system to use something like a mic and speaker. To do this, I'm going to use a WinUI structure and create a proper executable, in an attempt to create an industry level product (for free) that is unique and useful. This also means I can integrate my designs I've worked with, and be able to display more than just systems.
+## **Purpose**
 
+### Problems Armonia Aims to Solve
 
-To start with the design:
+|   #   | Problem                    | Description                                                                                                                                                                              |
+| :---: | :------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **1** | **Scalability**            | Most DAWs are massive and over-engineered for casual users and beginners. Armonia focuses on minimal, intuitive scaling.                                                                |
+| **2** | **Price Barrier**          | No one should need a $300 license to access EQ editing or MIDI controls. Armonia aims to provide professional-grade core tools entirely free.                                           |
+| **3** | **Solo Workflow**          | Designed for artists who write, sing, and record, not just producers. Includes an integrated lyrics editor and simple track management.                                                 |
+| **4** | **Cross-Platform**         | An eventual React iOS companion app to allow editing and playback from your phone.                                                                                                      |
+| **5** | **Project Storage**        | Future plans include a limited cloud database for polished projects. Users can store, retrieve, and remix anywhere.                                                                     |
+| **6** | **Localization**           | An eventual Language localization for both English and l'Italiano. Dopotutto il nome è italiano.                                                                                        |
+
+## **Design Philosophy**
+
+Armonia aims to emulate the **feel of grassroots in a music IDE**; a calm, expressive space where your workflow has space to breathe.
+UI is focused on clarity, warmth, and familiarity. Designed with earthy and clean inspiration and minimalism.
+
 ---
-**0.1** I need to create my splash screen and "logo" which is just going to be earthy. I'm going to use a wavey blue and black "A" for my icon, and the full name "Armonia" as my screen. Armonia will include a banjo, guitar, drums, and maybe a violin; it will be in the mountains. Will probably apply an oil filter, scribble filter to a picture I took in the Tetons.
 
-**0.2** I used a picture I took of delta lake in the Tetons, applied a scratch filter, and squared the image. I drew the instruments aforementioned and gave them a similar scratch design, albeit a little less and added them. Went with a blue design. The icon is small and still a WIP, will try to make it a little more noticeably shaped instead of just round. Maybe the guitar, a mic, or just the A.
+## **Tech Stack**
 
+| Layer                | Technology                                        |
+| :------------------- | :------------------------------------------------ |
+| **Frontend / UI**    | .NET 8 Framework, WPF MVVM , XAML, C#             |
+| **Audio Processing** | NAudio (WasapiCapture), custom waveform rendering |
+| **Storage**          | Local `/projects` structure → future cloud API    |
 
-Next I create my file structure (should've maybe done this first):
 ---
-<img width="319" height="798" alt="image" src="https://github.com/user-attachments/assets/1d10a646-6389-458e-88ed-11d92ce803a2" />
 
-As you can see from the image, this project is going to be built on C# and XML(xaml). Felt it was easier to become better at C# than it was to create a UI framework with C++. And XMLs, or XAMLs in this case are pretty simple and straightforward. I use the XAML to declare my logic in C#. Unfortunate downside with using C# is I'm going to use .NET(Downside???) to run the program.
+## **Development Progress**
 
-I'll break down the important notes for my stub files, not everything for the reason of space and time. Learned quite a lot of new information regarding mic import and converting to .wav files
+#### **Interface & Layout**
 
-app.xaml
-Entry
-*public partial class App : Application*
-partial for multiple refs, this file is for UI, the other file
-app.xaml.cs
-is for logic.
-MainWindow.xaml is my main user interface
-Moving forward, AudioCaptureService.cs is my way of capturing audio, I use .NETs framework NAudio, that wraps wasapi. It converts mic input to .wav files. Using WasapiCapture then allows me to use .net framework to easily record audio, thanks to NAudio for their documentation-
-https://github.com/naudio/NAudio
+* Fully designed **Record Page**, **Composer**, and **Lyrics** sections.
+* Responsive **Record–Composer–Lyrics** layout with a dynamic divider.
+* Record and Composer **Control Buttons** (Play, Stop, Record) with active-state animations.
+* Working **toolbar logic** and animation smoothing for clean transitions and scaling.
+* Polished **Italian-inspired brown UI theme with gold accents** consistent across views.
 
-*_writer  = new WaveFileWriter(outputPath, _capture.WaveFormat);*
-I use WaveFileWriter to write to a new .wav file using the format specified by capture device, then use _capture.WaveFormat to define the format(sample rate, channels, bit depth). Basically streams the PCM data into a placeholder .wav. Now we're getting somewhere, like 5% of the way somewhere. But now we have the hard part. The live data pump
+#### **Audio & Visualization**
 
-*_capture.DataAvailable += (s, a) =>
-{
-    _writer.Write(a.Buffer, 0, a.BytesRecorded);
-    float level = BitConverter.ToInt16(a.Buffer, 0) / 32768f;
-    LevelChanged?.Invoke(this, Math.Abs(level));
-};*
+* Live audio capture through **WasapiCapture** integrated on RecordPage.
+* Functional **waveform visualizer** (realistic gold bar wave display) that reacts in real time to input amplitude using my own C# logic (thanks to NAudio).
+* Core **waveform rendering pipeline** complete, I use for both live recording and static display in Composer.
+* Waveform coloration, gradient, and scaling now visually refined and tested.
 
-Took a bit of research but ultimately found a pretty useful explanation on stack overflow about subscribing the lambda to event,
-using _capture.DataAvailable I fire an event by NAudio every 10ms(or default), sending to AudioDataEventArgs. The hard part was the bit converter, which I ended up finding the answer from stack overflow. This is a vital part of a modern audio interface so I didn't want to just scratch it. Its working, but not as fast as I want so I will revisit once I have the general app running smoothly.
+#### **Composer Framework**
+
+* Semi-functional **Composer section** with dynamic lanes and timeline integration.
+* Configurable **horizontal BPM wheel** with realistic knob UI.
+* Dynamic **track rows** with mute/solo buttons, realistic fader sliders, and add/remove logic.
+* Hook system linking the **RecordPage output** and **Composer** base architecture for eventual “Push-to-Composer” feature.
+
+#### **Architecture & Framework**
+
+* MVVM architecture with `BindableBase`, `ClipViewModel`, `TrackViewModel`, and `ComposerViewModel`.
+* Modular control structure (`TrackRow`, `TrackAddRow`, `TimelineControl`, `ComposerControl`) ensuring scalability and clear separation.
+* Smooth animation timing, toolbar interaction hooks, and refined mouse event control throughout.
+
+---
+
+##  **Planned / In Progress**
+
+* Time-synchronized **tick grid** and scrolling logic aligned with BPM tempo.
+* Logic for dragging, splicing, resizing, and deleting waveform clips in each lane. 
+* MIDI instrument support
+* Integrated lyrics editor (Audio and Text matching)
+* Project sync
+* Theme engine (light, dark, rustic modes)
+
+---
+<img width="1024" height="1024" alt="ArmoniaOrangey" src="https://github.com/user-attachments/assets/5eb0d85c-8f5e-4622-9e08-0fa85ffb26a3" />
